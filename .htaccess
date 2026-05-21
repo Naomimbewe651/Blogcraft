@@ -1,0 +1,30 @@
+# BlogCraft CMS — Apache Configuration
+Options -Indexes
+ServerSignature Off
+
+# Protect sensitive files
+<FilesMatch "(db\.php|auth\.php|install\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Allow access to install.php from root only
+<Files "install.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Prevent direct access to uploads of PHP files
+<FilesMatch "\.php$">
+    <If "%{REQUEST_URI} =~ m#/uploads/#">
+        Order Allow,Deny
+        Deny from all
+    </If>
+</FilesMatch>
+
+# Optional: Clean URL rewrites (uncomment if needed)
+# RewriteEngine On
+# RewriteBase /blogcraft/
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^post/([a-z0-9-]+)$ post.php?slug=$1 [QSA,L]
